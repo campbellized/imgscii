@@ -107,19 +107,31 @@ def getColor(pixel):
 
 ASCII_CHARS = ["#", "?", "%", ".", "S", "+", ".", "*", ":", ",", "@"]
 
-file_name = input("What is the name of the image?\n")
-columns = input("How many columns do you want your ASCII art to be?\n")
-columns = int(columns)
-
 image = ""
+file_name = ""
+columns = 0
 
-try:
-    image = Image.open(file_name)
-except IOError:
-    print("Could not open image: '{}'".format(file_name))
-finally:
-    if(image):
-        image = resizeImage(image, columns)
-        ascii_image = readPixelData(image, columns)
-        displayASCII(ascii_image)
-        image.close()
+file_name = input("What is the name of the image?\n")
+
+while not image:
+    print(image)
+    try:
+        image = Image.open(file_name)
+        break
+    except IOError:
+        print("Could not open image: '{}'".format(file_name))
+        file_name = input("What is the name of the image?\n")
+
+columns = input("How many columns do you want your ASCII art to be?\n")
+
+while type(columns) != "int":
+    try:
+        columns = int(columns)
+        break
+    except ValueError:
+        columns = input("Please enter an integer.\n")
+
+image = resizeImage(image, columns)
+ascii_image = readPixelData(image, columns)
+displayASCII(ascii_image)
+image.close()
