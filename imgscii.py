@@ -109,12 +109,11 @@ ASCII_CHARS = ["#", "?", "%", ".", "S", "+", ".", "*", ":", ",", "@"]
 
 image = ""
 file_name = ""
-columns = 0
+columns = None
 
 file_name = input("What is the name of the image?\n")
 
 while not image:
-    print(image)
     try:
         image = Image.open(file_name)
         break
@@ -124,12 +123,16 @@ while not image:
 
 columns = input("How many columns do you want your ASCII art to be?\n")
 
-while type(columns) != "int":
+while type(columns) != "int":    
     try:
         columns = int(columns)
-        break
+        if columns <= 0:
+            columns = input("Please enter an whole number.\n")
+            continue
+        else:           
+            break
     except ValueError:
-        columns = input("Please enter an integer.\n")
+        columns = input("Please enter an whole number.\n")
 
 image = resizeImage(image, columns)
 ascii_image = readPixelData(image, columns)
