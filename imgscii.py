@@ -2,6 +2,41 @@ from PIL import Image
 import hues
 import colorsys
 
+
+def main():    
+    image = ""
+    file_name = ""
+    columns = None
+    
+    file_name = input("What is the name of the image?\n")
+    
+    while not image:
+        try:
+            image = Image.open(file_name)
+            break
+        except IOError:
+            print("Could not open image: '{}'".format(file_name))
+            file_name = input("What is the name of the image?\n")
+    
+    columns = input("How many columns do you want your ASCII art to be?\n")
+    
+    while type(columns) != "int":    
+        try:
+            columns = int(columns)
+            if columns <= 0:
+                columns = input("Please enter an whole number.\n")
+                continue
+            else:           
+                break
+        except ValueError:
+            columns = input("Please enter an whole number.\n")
+    
+    image = resizeImage(image, columns)
+    ascii_image = readPixelData(image, columns)
+    displayASCII(ascii_image)
+    image.close()
+    
+
 def displayASCII(ascii_list):
     """
     Prints a list of characters
@@ -33,7 +68,8 @@ def readPixelData(img, width=60):
     """
     Iterates through pixels in a PIL.Image. Returns list of ASCII characters.
     """
-
+    ascii_chars = ["#", "?", "%", ".", "S", "+", ".", "*", ":", ",", "@"]
+    
     pixels = list(img.getdata())
     ascii_pixels = []
     i = 0
@@ -41,11 +77,11 @@ def readPixelData(img, width=60):
     for p in pixels:
         # Char is assigned by pixel luminance
         lum = getLuminance(p)
-        index = round((len(ASCII_CHARS) - 1) * lum)
+        index = round((len(ascii_chars) - 1) * lum)
 
         # Color is  converted from RGB to ANSI color code
         color = getColor(p)
-        char = hues.huestr(ASCII_CHARS[index], hue_stack=(color,)).colorized
+        char = hues.huestr(ascii_chars[index], hue_stack=(color,)).colorized
 
         # Colorized Hue string is appended to list
         ascii_pixels.append(char)
@@ -104,37 +140,5 @@ def getColor(pixel):
     if h > 270 and h <= 330:
         return 35 # ANSI fg magenta
 
-
-ASCII_CHARS = ["#", "?", "%", ".", "S", "+", ".", "*", ":", ",", "@"]
-
-image = ""
-file_name = ""
-columns = None
-
-file_name = input("What is the name of the image?\n")
-
-while not image:
-    try:
-        image = Image.open(file_name)
-        break
-    except IOError:
-        print("Could not open image: '{}'".format(file_name))
-        file_name = input("What is the name of the image?\n")
-
-columns = input("How many columns do you want your ASCII art to be?\n")
-
-while type(columns) != "int":    
-    try:
-        columns = int(columns)
-        if columns <= 0:
-            columns = input("Please enter an whole number.\n")
-            continue
-        else:           
-            break
-    except ValueError:
-        columns = input("Please enter an whole number.\n")
-
-image = resizeImage(image, columns)
-ascii_image = readPixelData(image, columns)
-displayASCII(ascii_image)
-image.close()
+if __name__ == "__main__":
+    main()
