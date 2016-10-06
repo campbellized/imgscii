@@ -68,7 +68,7 @@ def readPixelData(img, width=60):
     """
     Iterates through pixels in a PIL.Image. Returns list of ASCII characters.
     """
-    ascii_chars = ["#", "?", "%", ".", "S", "+", ".", "*", ":", ",", "@"]
+    ascii_chars = ["#", "?", "%", "$", "Q", "+", ",", "j", "*", "~", "`", "."]
     
     pixels = list(img.getdata())
     ascii_pixels = []
