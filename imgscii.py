@@ -68,12 +68,13 @@ def resize_image(img, new_width=60):
 
     Parameters
     ----------
-    img : PIL Image
+    img : object
     new_width : int
 
     Returns
     -------
-    PIL Image
+    object
+        A PIL Image
 
     """
 
@@ -99,7 +100,7 @@ def read_pixel_data(img, width=60):
 
     Parameters
     ----------
-    img : PIL Image
+    img : object
     width : int
 
     Returns
