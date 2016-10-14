@@ -15,29 +15,33 @@ def main():
     """Accept user input and use the provided information to open an image
     and create an ASCII representation.
     """
-    image = ""
-    file_name = input("What is the name of the image?\n")
 
-    while not image:
+    while True:
+        file_name = input("What is the name of the image?\n")
+
+        if not file_name:
+            print("Please enter a filename.")
+            continue
+
         try:
             image = Image.open(file_name)
             break
         except IOError:
             print("Could not open image: '{}'".format(file_name))
-            file_name = input("What is the name of the image?\n")
 
-    columns = input("How many columns do you want your ASCII art to be?\n")
+    while True:
+        columns = input("How many columns do you want your ASCII art to be?\n")
 
-    while not isinstance(columns, int):
         try:
             columns = int(columns)
-            if columns <= 0:
-                columns = input("Please enter an whole number.\n")
-                continue
-            else:
+            if columns > 0:
                 break
+            else:
+                print("Please enter a whole number. Example: 30")
+                continue
         except ValueError:
-            columns = input("Please enter an whole number.\n")
+            print("Please enter a whole number. Example: 30")
+            continue
 
     image = resize_image(image, columns)
     ascii_image = read_pixel_data(image, columns)
