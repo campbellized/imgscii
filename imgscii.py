@@ -79,14 +79,12 @@ def resize_image(img, new_width=60):
     """
 
     # Get original dimensions and aspect ratio
-    (original_width, original_height) = img.size
+    original_width, original_height = img.size
 
     # Calculate scale of new dimensions relative to original
-    scale = (new_width * 100) / original_width
-    scale *= 10**-2
+    scale = new_width / original_width
 
     # Calculate new dimensions
-    new_width = original_width * scale
     new_height = original_height * scale
 
     return img.resize((round(new_width), round(new_height)))
