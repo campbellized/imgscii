@@ -165,15 +165,17 @@ def get_color(pixel):
         An ANSI escape code.
      """
 
-    (red, green, blue) = pixel
+    # By slicing the tuple we are able to ignore the alpha channel if it exists
+    red, green, blue = pixel[:3]
 
     # Convert RGB values to floats. 255 => 1.0
     red /= 255
     green /= 255
     blue /= 255
 
+    hue, lum, sat = colorsys.rgb_to_hls(red, green, blue)
+
     # Convert hue to range of 0 to 360 degrees
-    (hue, lum, sat) = colorsys.rgb_to_hls(red, green, blue)
     hue *= 360
 
     if lum >= 0.7:
