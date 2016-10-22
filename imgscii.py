@@ -19,6 +19,7 @@ def main():
     while True:
         file_name = input("What is the name of the image?\n")
 
+        # Check input for empty string
         if not file_name:
             print("Please enter a filename.")
             continue
@@ -32,6 +33,7 @@ def main():
     while True:
         columns = input("How many columns do you want your ASCII art to be?\n")
 
+        # Ensure input is a positive float or integer
         try:
             columns = int(columns)
             if columns > 0:
@@ -78,13 +80,10 @@ def resize_image(img, new_width=60):
 
     """
 
-    # Get original dimensions and aspect ratio
     original_width, original_height = img.size
 
-    # Calculate scale of new dimensions relative to original
+    # Get scale factor of output img and use it to calculate the output height
     scale = new_width / original_width
-
-    # Calculate new dimensions
     new_height = original_height * scale
 
     return img.resize((round(new_width), round(new_height)))
@@ -113,18 +112,18 @@ def read_pixel_data(img, width=60):
     i = 0
 
     for pixel in pixels:
-        # Char is assigned by pixel luminance
+        # Use pixel luminance to determine the ASCII character used.
         lum = get_luminance(pixel)
         index = round((len(ascii_chars) - 1) * lum)
 
-        # Color is  converted from RGB to ANSI color code
+        # Color is converted from RGB to ANSI color code
         color = get_color(pixel)
         char = hues.huestr(ascii_chars[index], hue_stack=(color,)).colorized
 
         # Colorized Hue string is appended to list
         ascii_pixels.append(char)
 
-        # Add newlines as necessary
+        # Add a newline after ever I iterations, where I is the output width
         if i == width - 1:
             ascii_pixels.append("\n")
             i = 0
