@@ -6,10 +6,11 @@ Usage
     $ python imgscii.py
 """
 
+import os.path as path
+
 from PIL import Image
 import hues
 import colorsys
-import os.path as path
 
 
 def main():
