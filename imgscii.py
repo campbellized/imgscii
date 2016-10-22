@@ -23,8 +23,6 @@ def main():
         print("Could not open image: '{}'".format(file_name))
         file_name = input("What is the name of the image?\n")
 
-    image = Image.open(file_name)
-
     while True:
         columns = input("How many columns do you want your ASCII art to be?\n")
 
@@ -40,10 +38,10 @@ def main():
             print("Please enter a whole number. Example: 30")
             continue
 
-    image = resize_image(image, columns)
-    ascii_image = read_pixel_data(image, columns)
-    display_ascii(ascii_image)
-    image.close()
+    with Image.open(file_name) as image:
+        image = resize_image(image, columns)
+        ascii_image = read_pixel_data(image, columns)
+        display_ascii(ascii_image)
 
 
 def display_ascii(ascii_list):
