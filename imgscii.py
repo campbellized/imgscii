@@ -9,6 +9,7 @@ Usage
 from PIL import Image
 import hues
 import colorsys
+import os.path as path
 
 
 def main():
@@ -16,19 +17,13 @@ def main():
     and create an ASCII representation.
     """
 
-    while True:
+    file_name = input("What is the name of the image?\n")
+
+    while not path.isfile(file_name):
+        print("Could not open image: '{}'".format(file_name))
         file_name = input("What is the name of the image?\n")
 
-        # Check input for empty string
-        if not file_name:
-            print("Please enter a filename.")
-            continue
-
-        try:
-            image = Image.open(file_name)
-            break
-        except IOError:
-            print("Could not open image: '{}'".format(file_name))
+    image = Image.open(file_name)
 
     while True:
         columns = input("How many columns do you want your ASCII art to be?\n")
