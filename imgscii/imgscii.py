@@ -9,7 +9,7 @@ Usage
 import os.path as path
 
 from PIL import Image
-import hues
+from colorama import init, Fore
 import colorsys
 
 
@@ -53,6 +53,8 @@ def display_ascii(ascii_list):
     ascii_list : list
 
     """
+
+    init()  # Initialize Colorama
 
     print(*ascii_list, sep="")
 
@@ -110,12 +112,10 @@ def read_pixel_data(img, width=60):
         lum = get_luminance(pixel)
         index = round((len(ascii_chars) - 1) * lum)
 
-        # Color is converted from RGB to ANSI color code
         color = get_color(pixel)
-        char = hues.huestr(ascii_chars[index], hue_stack=(color,)).colorized
 
-        # Colorized Hue string is appended to list
-        ascii_pixels.append(char)
+        # ANSI escape code is paired with an ASCII char to produce a styled char
+        ascii_pixels.append(color + ascii_chars[index])
 
         # Add a newline after ever I iterations, where I is the output width
         if i == width - 1:
@@ -157,7 +157,7 @@ def get_color(pixel):
 
     Returns
     -------
-    int
+    str
         An ANSI escape code.
      """
 
@@ -175,22 +175,22 @@ def get_color(pixel):
     hue *= 360
 
     if lum >= 0.7:
-        color_code = 37  # ANSI fg white
+        color_code = Fore.WHITE  # ANSI fg white
     elif lum <= 0.2:
-        color_code = 30  # ANSI fg black
+        color_code = Fore.BLACK # ANSI fg black
     else:
         if 30 < hue <= 90:
-            color_code = 33  # ANSI fg yellow
+            color_code = Fore.YELLOW  # ANSI fg yellow
         elif 90 < hue <= 150:
-            color_code = 32  # ANSI fg green
+            color_code = Fore.GREEN  # ANSI fg green
         elif 150 < hue <= 210:
-            color_code = 36  # ANSI fg cyan
+            color_code = Fore.CYAN  # ANSI fg cyan
         elif 210 < hue <= 270:
-            color_code = 34  # ANSI fg blue
+            color_code = Fore.BLUE  # ANSI fg blue
         elif 270 < hue <= 330:
-            color_code = 35  # ANSI fg magenta
+            color_code = Fore.MAGENTA  # ANSI fg magenta
         else:  # hue <= 30 or hue > 330
-            color_code = 31  # ANSI fg red
+            color_code = Fore.RED  # ANSI fg red
 
     return color_code
 
