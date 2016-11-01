@@ -194,5 +194,27 @@ def get_color(pixel):
 
     return color_code
 
+
+def printscii(file):
+    """Open an image and print it's contents to the console as ASCII art.
+
+    Parameters
+    -----------
+    file : str
+
+    Returns
+    -------
+    None
+
+     """
+    try:
+        with Image.open(file) as image:
+            image = resize_image(image)
+            ascii_image = read_pixel_data(image)
+            display_ascii(ascii_image)
+    except OSError as e:
+        print(e)
+
+
 if __name__ == "__main__":
     main()

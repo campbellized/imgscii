@@ -1,1 +1,1 @@
-# from .imgscii import func
+from .imgscii import printscii
