@@ -12,6 +12,7 @@ from PIL import Image
 from colorama import init, Fore
 import colorsys
 
+ASCII_CHARS = ("#", "?", "%", "$", "Q", "+", ",", "j", "*", "~", "`", ".")
 
 def main():
     """Accept user input and use the provided information to open an image
@@ -101,7 +102,6 @@ def read_pixel_data(img, width=60):
     list
         A list of ASCII characters.
     """
-    ascii_chars = ["#", "?", "%", "$", "Q", "+", ",", "j", "*", "~", "`", "."]
 
     pixels = list(img.getdata())
     ascii_pixels = []
@@ -110,12 +110,12 @@ def read_pixel_data(img, width=60):
     for pixel in pixels:
         # Use pixel luminance to determine the ASCII character used.
         lum = get_luminance(pixel)
-        index = round((len(ascii_chars) - 1) * lum)
+        index = round((len(ASCII_CHARS) - 1) * lum)
 
         color = get_color(pixel)
 
         # ANSI escape code is paired with an ASCII char to produce a styled char
-        ascii_pixels.append(color + ascii_chars[index])
+        ascii_pixels.append(color + ASCII_CHARS[index])
 
         # Add a newline after ever I iterations, where I is the output width
         if i == width - 1:
