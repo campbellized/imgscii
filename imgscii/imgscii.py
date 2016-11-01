@@ -86,7 +86,7 @@ def resize_image(img, new_width=60):
     return img.resize((round(new_width), round(new_height)))
 
 
-def read_pixel_data(img, width=60):
+def read_pixel_data(img, width=60, char_set=ASCII_CHARS):
     """Iterates through pixels in a PIL.Image.
 
     Each pixel's color and luminance values are calculated and a list of
@@ -96,12 +96,16 @@ def read_pixel_data(img, width=60):
     ----------
     img : object
     width : int
+    char_set : tuple
 
     Returns
     -------
     list
         A list of ASCII characters.
     """
+
+    if not isinstance(char_set, tuple):
+        raise TypeError("char_set must be of type tuple.")
 
     pixels = list(img.getdata())
     ascii_pixels = []
@@ -110,12 +114,12 @@ def read_pixel_data(img, width=60):
     for pixel in pixels:
         # Use pixel luminance to determine the ASCII character used.
         lum = get_luminance(pixel)
-        index = round((len(ASCII_CHARS) - 1) * lum)
+        index = round((len(char_set) - 1) * lum)
 
         color = get_color(pixel)
 
         # ANSI escape code is paired with an ASCII char to produce a styled char
-        ascii_pixels.append(color + ASCII_CHARS[index])
+        ascii_pixels.append(color + char_set[index])
 
         # Add a newline after ever I iterations, where I is the output width
         if i == width - 1:
@@ -195,7 +199,7 @@ def get_color(pixel):
     return color_code
 
 
-def printscii(file):
+def printscii(file, **kwargs):
     """Open an image and print it's contents to the console as ASCII art.
 
     Parameters
@@ -207,10 +211,14 @@ def printscii(file):
     None
 
      """
+
+    width = kwargs.get("columns", 60)
+    characters = kwargs.get("char_set", ASCII_CHARS)
+
     try:
         with Image.open(file) as image:
-            image = resize_image(image)
-            ascii_image = read_pixel_data(image)
+            image = resize_image(image, width)
+            ascii_image = read_pixel_data(image, width, characters)
             display_ascii(ascii_image)
     except OSError as e:
         print(e)
