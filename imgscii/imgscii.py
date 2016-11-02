@@ -7,6 +7,7 @@ Usage
 """
 
 import os.path as path
+import argparse
 
 from PIL import Image
 from colorama import init, Fore
@@ -14,7 +15,7 @@ import colorsys
 
 ASCII_CHARS = ("#", "?", "%", "$", "Q", "+", ",", "j", "*", "~", "`", ".")
 
-def main():
+def main(argsv):
     """Accept user input and use the provided information to open an image
     and create an ASCII representation.
     """
@@ -26,6 +27,10 @@ def main():
         file_name = input("What is the name of the image?\n")
 
     while True:
+        if argsv.columns:
+            columns = int(argsv.columns)
+            break
+
         columns = input("How many columns do you want your ASCII art to be?\n")
 
         # Ensure input is a positive float or integer
@@ -225,4 +230,9 @@ def printscii(file, **kwargs):
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-c", "--columns", type=int,
+                        help="Define the width of ASCII art in columns.")
+    args = parser.parse_args()
+
+    main(args)
