@@ -15,10 +15,16 @@ import colorsys
 
 ASCII_CHARS = ("#", "?", "%", "$", "Q", "+", ",", "j", "*", "~", "`", ".")
 
-def main(argsv):
+
+def main():
     """Accept user input and use the provided information to open an image
     and create an ASCII representation.
     """
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-c", "--columns", type=int,
+                        help="Define the width of ASCII art in columns.")
+    args = parser.parse_args()
 
     file_name = input("What is the name of the image?\n")
 
@@ -27,8 +33,8 @@ def main(argsv):
         file_name = input("What is the name of the image?\n")
 
     while True:
-        if argsv.columns:
-            columns = int(argsv.columns)
+        if args.columns:
+            columns = int(args.columns)
             break
 
         columns = input("How many columns do you want your ASCII art to be?\n")
@@ -120,7 +126,7 @@ def read_pixel_data(img, width=60, char_set=ASCII_CHARS):
 
         color = get_color(pixel)
 
-        # ANSI escape code is paired with an ASCII char to produce a styled char
+        # ANSI escape code is paired w/ an ASCII char to produce a styled char
         ascii_pixels.append(color + char_set[index])
 
         # Add a newline after ever I iterations, where I is the output width
@@ -175,7 +181,7 @@ def get_color(pixel):
     green /= 255
     blue /= 255
 
-    hue, lum, sat = colorsys.rgb_to_hls(red, green, blue)
+    hue, lum = colorsys.rgb_to_hls(red, green, blue)[:2]
 
     # Convert hue to range of 0 to 360 degrees
     hue *= 360
@@ -183,7 +189,7 @@ def get_color(pixel):
     if lum >= 0.7:
         color_code = Fore.WHITE  # ANSI fg white
     elif lum <= 0.2:
-        color_code = Fore.BLACK # ANSI fg black
+        color_code = Fore.BLACK  # ANSI fg black
     else:
         if 30 < hue <= 90:
             color_code = Fore.YELLOW  # ANSI fg yellow
@@ -224,14 +230,9 @@ def printscii(file, **kwargs):
             image = resize_image(image, width)
             ascii_image = read_pixel_data(image, width, characters)
             display_ascii(ascii_image)
-    except OSError as e:
-        print(e)
+    except OSError as error:
+        print(error)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-c", "--columns", type=int,
-                        help="Define the width of ASCII art in columns.")
-    args = parser.parse_args()
-
-    main(args)
+    main()

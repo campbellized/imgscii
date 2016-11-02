@@ -1,3 +1,5 @@
 images
 .idea
+.tox
+.pylint.d
 __pycache__/
