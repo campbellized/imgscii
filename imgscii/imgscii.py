@@ -45,10 +45,7 @@ def main(argsv):
             print("Please enter a whole number. Example: 30")
             continue
 
-    with Image.open(file_name) as image:
-        image = resize_image(image, columns)
-        ascii_image = read_pixel_data(image, columns)
-        display_ascii(ascii_image)
+    printscii(file_name, columns=columns)
 
 
 def display_ascii(ascii_list):
@@ -210,6 +207,8 @@ def printscii(file, **kwargs):
     Parameters
     -----------
     file : str
+    columns : int
+    char_set : list
 
     Returns
     -------
