@@ -24,6 +24,12 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--columns", type=int,
                         help="Define the width of ASCII art in columns.")
+    parser.add_argument("-m", "--monochrome", dest="monochrome",
+                        action="store_true",
+                        help="Print ASCII art without colors")
+
+    parser.set_defaults(monochrome=False)
+
     args = parser.parse_args()
 
     file_name = input("What is the name of the image?\n")
@@ -51,7 +57,7 @@ def main():
             print("Please enter a whole number. Example: 30")
             continue
 
-    printscii(file_name, columns=columns)
+    printscii(file_name, args, columns=columns)
 
 
 def display_ascii(ascii_list):
@@ -94,7 +100,7 @@ def resize_image(img, new_width=60):
     return img.resize((round(new_width), round(new_height)))
 
 
-def read_pixel_data(img, width=60, char_set=ASCII_CHARS):
+def read_pixel_data(img, args, width=60, char_set=ASCII_CHARS):
     """Iterates through pixels in a PIL.Image.
 
     Each pixel's color and luminance values are calculated and a list of
@@ -124,7 +130,7 @@ def read_pixel_data(img, width=60, char_set=ASCII_CHARS):
         lum = get_luminance(pixel)
         index = round((len(char_set) - 1) * lum)
 
-        color = get_color(pixel)
+        color = get_color(pixel, args)
 
         # ANSI escape code is paired w/ an ASCII char to produce a styled char
         ascii_pixels.append(color + char_set[index])
@@ -158,7 +164,7 @@ def get_luminance(pixel):
     return round(luminance, 2)
 
 
-def get_color(pixel):
+def get_color(pixel, args):
     """Get the color of a pixel and return the ANSI escape code.
 
     https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
@@ -185,8 +191,9 @@ def get_color(pixel):
 
     # Convert hue to range of 0 to 360 degrees
     hue *= 360
-
-    if lum >= 0.7:
+    if args.monochrome:
+        color_code = ""
+    elif lum >= 0.7:
         color_code = Fore.WHITE  # ANSI fg white
     elif lum <= 0.2:
         color_code = Fore.BLACK  # ANSI fg black
@@ -207,7 +214,7 @@ def get_color(pixel):
     return color_code
 
 
-def printscii(file, **kwargs):
+def printscii(file, args, **kwargs):
     """Open an image and print it's contents to the console as ASCII art.
 
     Parameters
@@ -228,7 +235,7 @@ def printscii(file, **kwargs):
     try:
         with Image.open(file) as image:
             image = resize_image(image, width)
-            ascii_image = read_pixel_data(image, width, characters)
+            ascii_image = read_pixel_data(image, args, width, characters)
             display_ascii(ascii_image)
     except OSError as error:
         print(error)
