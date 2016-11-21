@@ -18,6 +18,7 @@ python imgscii.py
 ```
 
 ## To-Dos
+* Improve the documentation with examples that use arguments.
+* Release this package to PyPA
 * Add more options for printing
-* Restructure the code into an actual package
 * Create more ASCII artwork
