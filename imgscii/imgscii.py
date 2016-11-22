@@ -10,7 +10,7 @@ import os.path as path
 import argparse
 
 from PIL import Image
-from colorama import init, Fore
+from colorama import init, Fore, Style
 import colorsys
 
 ASCII_CHARS = ("#", "?", "%", "$", "Q", "+", ",", "j", "*", "~", "`", ".")
@@ -199,7 +199,7 @@ def get_color(pixel, **kwargs):
     # Convert hue to range of 0 to 360 degrees
     hue *= 360
     if monochrome:
-        color_code = ""
+        color_code = Style.RESET_ALL
     elif lum >= 0.7:
         color_code = Fore.WHITE  # ANSI fg white
     elif lum <= 0.2:
