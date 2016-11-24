@@ -1,5 +1,8 @@
-images
+images/
 .idea
 .tox
 .pylint.d
 __pycache__/
+build/
+dist/
+*.egg-info/
