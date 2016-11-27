@@ -20,7 +20,7 @@ setup(
 
     # Versions should comply with PEP440.
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.0.0',
+    version='1.0.1',
 
     description='Create ASCII artwork from images.',
     long_description=long_description,
