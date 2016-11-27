@@ -10,7 +10,7 @@ import os.path as path
 import argparse
 
 from PIL import Image
-from colorama import init, Fore, Style
+from colorama import init, deinit, Fore, Style
 import colorsys
 
 ASCII_CHARS = ("#", "?", "%", "$", "Q", "+", ",", "j", "*", "~", "`", ".")
@@ -69,9 +69,7 @@ def display_ascii(ascii_list):
 
     """
 
-    init()  # Initialize Colorama
-
-    print(*ascii_list, sep="")
+    print("".join(ascii_list))
 
 
 def resize_image(img, new_width):
@@ -236,6 +234,7 @@ def printscii(file, **kwargs):
 
      """
 
+    init(autoreset=True)
     width = kwargs.get("columns", 60)
 
     try:
@@ -245,6 +244,8 @@ def printscii(file, **kwargs):
             display_ascii(ascii_image)
     except OSError as error:
         print(error)
+    finally:
+        deinit()
 
 
 if __name__ == "__main__":
