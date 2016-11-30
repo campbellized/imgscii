@@ -9,18 +9,19 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
-here = path.abspath(path.dirname(__file__))
-
-# Get the long description from the README file
-with open(path.join(here, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
+try:
+    import pypandoc
+    long_description = pypandoc.convert('README.md', 'rst')
+    long_description = long_description.replace("\r","")
+except(IOError, ImportError):
+    long_description = open('README.md').read()
 
 setup(
     name='Imgscii',
 
     # Versions should comply with PEP440.
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.0.1',
+    version='1.0.2',
 
     description='Create ASCII artwork from images.',
     long_description=long_description,
